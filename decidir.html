@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="preconnect" href="https://fonts.googleapis.com" />
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+	<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap"
+		rel="stylesheet" />
+	<link href="./index.css" rel="stylesheet" />
+	<title></title>
+</head>
+
+<body>
+  <div class="centering-container">
+    <img src="tmobpaylogo.png" alt="t-mobs pay logo">
+  </div>
+
+  <div class="centering-container">
+
+  <div class="orange-box">
+      <p class="text-bold">Titular:</p>
+      <p class="text-right">Julian Klein</p>
+   
+      <p class="text-bold">Dni:</p>
+      <p class="text-right">31.385.432</p>
+   
+      <p class="text-bold">Saldo a pagar:</p>
+      <p class="text-right">$3.000</p>
+   
+</div>
+  </div>
+	<form action="" id="formulario">
+		<fieldset>
+
+			<label for="card_issuer" class="input-label">Tarjeta</label>
+			<select data-decidir="card_issuer" class="input styled-select" form="formulario">
+				<option value="" disabled selected>
+					Seleccioná el tipo de tarjeta
+				</option>
+				<option value="visa-credito">Visa Crédito</option>
+				<option value="visa-debito">Visa Débito</option>
+				<option value="mastercard-credito">MasterCard Crédito</option>
+				<option value="mastercard-debito">MasterCard Débito</option>
+				<option value="maestro-debito">Maestro Débito</option>
+				<option value="americanexpress-credito">
+					AmericanExpress Crédito
+				</option>
+				<option value="cabal-credito">Cabal Crédito</option>
+				<option value="cabal-debito">Cabal Débito</option>
+			</select>
+
+			<label for="card_number" class="input-label">Numero de tarjeta:</label>
+			<input class="input" type="text" data-decidir="card_number" placeholder="Escribí el número de tarjeta" />
+
+			<label for="card_holder_name" class="input-label">Nombre del titular:</label>
+			<input class="input" type="text" data-decidir="card_holder_name" placeholder="Escribí nombre y apellido del titular" />
+
+			<label for="card_holder_doc_type" class="input-label">Tipo de documento:</label>
+			<select data-decidir="card_holder_doc_type" class="input"  form="formulario">
+        <option value="" disabled selected>
+					Seleccioná un tipo de documento
+				</option>
+				<option value="dni">DNI</option>
+			</select>
+
+			<label for="card_holder_doc_type" class="input-label">Numero de documento:</label>
+			<input class="input" type="text" data-decidir="card_holder_doc_number" placeholder="Escribí el número de documento" />
+
+			<div class="row">
+				<div class="row-content">
+			<label for="card_expiration_month" class="input-label">Mes de vencimiento:</label>
+			<input class="input" type="text" data-decidir="card_expiration_month" placeholder="MM" />
+		</div>
+		<div class="row-content">
+			<label for="card_expiration_year" class="input-label">Año de vencimiento:</label>
+			<input class="input" type="text" data-decidir="card_expiration_year" placeholder="AA" />
+		</div>
+	</div>
+
+		<label for="security_code" class="input-label">Codigo de seguridad:</label>
+		<input class="input half-input" type="text" data-decidir="security_code" placeholder="xxx" />
+
+		<input type="submit" value="Pagar" class="submit-btn" />
+		</fieldset>
+	</form>
+	<script type="text/javascript"
+		src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.26.0/polyfill.min.js"></script>
+	<script src="https://live.decidir.com/static/v2.5/decidir.js"></script>
+	<script type="text/javascript">
+		const publicApiKey = "e9cdb99fff374b5f91da4480c8dca741";
+		const urlSandbox = "https://developers.decidir.com/api/v2";
+		const decidir = new Decidir(urlSandbox);
+		decidir.setPublishableKey(publicApiKey);
+		decidir.setTimeout(5000);
+
+		const form = document.querySelector("#formulario");
+		form.addEventListener("submit", sendForm);
+
+		function sdkResponseHandler(status, response) {
+			if (window.ReactNativeWebView) {
+				const message = { status, response };
+				window.ReactNativeWebView.postMessage(JSON.stringify(message));
+			}
+		}
+
+		function sendForm(event) {
+			event.preventDefault();
+			console.log("SEND FORM...");
+			console.log("Decidir: ", decidir);
+			decidir.createToken(form, sdkResponseHandler);
+			return false;
+		}
+	</script>
+</body>
+
+</html>
